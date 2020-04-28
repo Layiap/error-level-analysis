@@ -1,2 +1,15 @@
 \chapter{Grundlagen}
-	
+\section{Bildkompression}
+Für die Anwendung der \acl{ELA} zu verstehen, ist es wichtig die Grundlagen der Bildkompression zu kennen. Die \ac{ELA} setzt an den Eigenschaften an, welche Bilder in Verlustbehafteten Bildformaten aufweisen.\\
+Eines der bekanntesten Bildformate welches diese Eigenschaft ausweist ist JPEG, eine Norm (ISO/IEC 10918-1 oder CCITT T.81) zur Bildkomprimierung welche von der \ac{JPEG} entwickelt wurde. Das \ac{JPEG}-Schema ist zwar bei genauer Betrachtung recht komplex, das Grundprinzip ist allerdings leicht zu verstehen.\\
+In einem ersten Schritt wird das Bitmap-Bild in 8x8 Matrizen aufgeteilt und mit Hilfe der \acp{DCT} von einer 8x8 Ortsmatrix, in eine 8x8 Frequenzmatrix umgewandelt. Alle folgenden Schritte arbeiten nun mit der diesen Matrizen, das Bild wird nicht mehr als ganzes betrachtet.\\
+Jede dieser Pixelgruppen wird separat mit einer eigenen DCT kodiert und kann auch wieder verlustfrei reproduziert werden. Abbildung \ref{fig:Dctjpeg} zeigt die Basisfunktion einer zweidimensionalen DCT wobei zu sehen ist, dass die Frequenz von links nach rechts und von oben nach unten zunimmt. Bei der anschließenden Quantisierung werden die höherfrequenten Anteile des Bildes geringer gewichtet, als die niederfrequenten und die Koeffizienten welche nahezu 0 sind werden auf 0 gesetzt.\cite{Zichner2002}
+Der letzte Schritt der Kompression ist die Entropie-Kodierung der Koeffizienten, wobei meistens die Huffman-Kodierung verwendet wird.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[scale=0.4]{images/Dctjpeg.png}
+		\caption{Basisfunktion einer zweidimensionalen DCT}
+		\label{fig:Dctjpeg}
+	\end{center}
+\end{figure}
