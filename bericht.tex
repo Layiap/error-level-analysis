@@ -1,0 +1,108 @@
+
+\documentclass[
+	ngerman          % neue deutsche Rechtschreibung
+	,a4paper          % Papiergrösse
+	% ,twoside          % Zweiseitiger Druck (rechts/links)
+	,12pt             % Schriftgrösse (11pt default in Vorlage)
+	,pdftex
+	,abstract=on
+	%  ,hidelinks		% Kästchen um Links verbergen
+	%  ,disable         % Todo-Markierungen auschalten
+	]{scrreprt}
+\setcounter{tocdepth}{1} % Tiefe der TOC, Chapter starten bei 0
+
+\usepackage{styles/bericht}
+\usepackage{adjustbox}
+\usepackage{paralist}
+\usepackage{appendix}
+
+\include{general/titlepage-declarations}
+
+\hypersetup{%%
+	pdfauthor={\Autor},
+	pdftitle={\Titel},
+	pdfsubject={\BerichtArt}
+}
+
+%%% Schrift definition
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[onehalfspacing]{setspace}
+% Times new Roman
+%\usepackage{mathptmx} \renewcommand{\familydefault}{\rmdefault}
+% Arial
+%\usepackage{uarial} \renewcommand{\familydefault}{\sfdefault}
+% Computern-Modern Schriftfamilie
+\usepackage{lmodern}
+
+\usepackage{color, colortbl}
+\definecolor{Gray}{gray}{0.9}
+
+
+%%% Paragraph-Überschrift in extra Zeile
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+	{-3.25ex\@plus -1ex \@minus -.2ex}%
+	{1.5ex \@plus .2ex}%
+	{\normalfont\normalsize\bfseries}}
+\makeatother
+
+
+
+%%% Tabelle: Abstände (Spalte / Zeile)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\tabcolsep}{6pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.5} % Default value: 1
+
+%%% Tabelle: Neue Fixed-Width Spaltentypen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Neue Befehle (Mario)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Benutzt man das "biblatex"-Paket, dann muß das hier stehen:
+% siehe auch die mit BIBLATEX markierten Zeil bericZählert.sty
+
+\begin{document}
+	\pagenumbering{Roman}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	\begin{titlepage}
+		\include{general/titlepage}
+	\end{titlepage}
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	% Nur für Bachelorarbeiten einfügen:
+	\include{general/erklaerung}
+	\include{kapitel/abstract}
+	\newcounter{savepage}
+	
+	\include{general/verzeichnisse}
+	
+	%Hier startet der Inhalt -> Arabische Seitennummerierung
+	\setcounter{savepage}{\arabic{page}}
+	\pagenumbering{arabic}
+	\include{kapitel/1_Einleitung}
+	\include{kapitel/2_Grundlagen}
+	\include{kapitel/3_Hauptteil}
+	\include{kapitel/4_Abschluss}
+	
+	\pagenumbering{Roman}
+	\setcounter{page}{\thesavepage}
+	\include{general/appendix}
+	
+	\listoftodos
+	\todo[inline]{List of Todos entfernen}
+\end{document}
