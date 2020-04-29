@@ -45,7 +45,7 @@ Mathematisch kommt hier das Benfordsche Gesetz zum Einsatz welche den Frequenzbe
 Obwohl mithilfe dieser Methode versucht wird, Anomalien in der Verteilung der Bildblöcke zu erkennen, stößt sie an ihre Grenzen wenn es darum geht Anomalien in Bildern mit falsch ausgerichteten Blockgrenzen zu erkennen.\\
 Das heißt, falls das Bild nach der Manipulation beschnitten oder räumlich verschoben wurde, sind die Blockgrenzen gegenüber dem ursprünglichen JPEG Bild falsch ausgerichtet und können somit nicht korrekt erkannt werden.
 
-\section{Error-Level-Analyse}
+\section{Error-Level-Analyse} \label{chap:ela}
 Die \ac{ELA} ist eine Methoden zur Erkennung unterschiedlichen Kompressionsgraden in einem Bild, Ziel ist es also nun die Bereiche eines Bildes hervorzuheben, welche unterschiedliche Kompressionseigenschaften aufweisen. Bei der ELA wird das zu untersuchende Bild mit einer bestimmten JPEG-Qualitätsstufe neu komprimiert. Das neu komprimierte Bild wird dann mit dem Original verglichen, es sollte sich die Qualität jedes Quadrat der 8x8 Matrix um das selbe Nivea reduzieren.\\
 
 Welche JPEG-Qualitätsstufe für die erneute Komprimierung des Bildes verwendet wird, kann mithilfe einer Formel berechnet werden (Siehe \autoref{fig:qualitaetsformel}), welche die Differenz zwischen dem Mittelwert aus der Quantisierungstabelle Y (Luminanz) und CrCb (Chrominanz) berechnet. Dieser Schritt ist Wichtig und kann einen Großen Einflussfaktor auf das Endergebnis haben. Wenn beispielsweise ein Bild mit einer Qualitätsstufe von 90\% gespeichert wird und dann erneut mit einer Qualitätsstufe von 90\% gespeichert wird hat das erneut abgespeicherte Bild im Vergleich zum Originalen eine Qualitätsstufe von 81\%.\cite{Warif_2015}
