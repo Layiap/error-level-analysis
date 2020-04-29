@@ -13,11 +13,6 @@ Bevor ein Digitalbild im JPEG-Format Kodiert werden kann muss es aus dem RGB-Far
 	\end{center}
 \end{figure}
 
-
-
-
-
-
 \section{Bildkompression in JPEG} \label{chap:bildkompression}
 Die in \autoref{chap:bilddarstellung} beschriebenen Farbräume sind die Grundlage für die Kompression im JPEG Format. Der Y-Farbraum welcher die Helligkeit des Bildes beschreibt wird hierbei in der original Auflösung belassen. Im U und V Farbraum werden jeweils 4 Pixel zusammengefasst. Diesen Vorgang nennt man Subsampling.\cite{Vornberger} Nachfolgende Schritte werden auf alle drei Matrizen des YUV-Farbraums angewandt.\\
 
@@ -37,14 +32,12 @@ Die Dateigröße des komprimierten Bildes hängt vom Inhalt und der Qualität de
 
 \section{Erkennung von Kompressionsartefakten}
 In den meisten Fällen einer Bildmanipulation wird ein Bild neu komprimiert, speziell dann wenn es durch die Bildbearbeitungssoftware abgespeichert wird. Dieser Vorgang verändert die ursprüngliche Komprimierungseigenschaften, das Ziel besteht nun darin diese Komprimierungseigenschaften, auch Artefakte genannt, zu analysieren und innerhalb eines Bildes möglicherweise Inkonsistenzen zu erkennen.\\
-Hier gibt es zwei methodische Vorgehensweisen um solche Artefakte zu unterscheiden. Erstere Methode versucht Inkonsistenzen in der JPEG-Quantisierungstabellen zu erkennen, zweitere verwendet die Komprimierungsartefakte im Frequenzbereich des Bildes um so eine Signatur zu bilden und zwischen unterschiedlichen Kompressionscharakteristika zu unterscheiden.\cite{Chen2011} In folgenden Unterpunkten werden beide Ansätze nochmals kurz zusammengefasst:
+Hier gibt es zwei methodische Vorgehensweisen um solche Artefakte zu unterscheiden. Erstere Methode versucht Inkonsistenzen in der JPEG-Quantisierungstabellen zu erkennen, zweitere verwendet die Komprimierungsartefakte im Frequenzbereich des Bildes um so eine Signatur zu bilden und zwischen unterschiedlichen Kompressionscharakteristika zu unterscheiden.\cite{Chen2011} In folgenden Unterpunkten werden beide Ansätze nochmals kurz zusammengefasst.
 
 \subsection{Inkonsistenz bei der Quantisierungstabelle}
 Beim kodieren eines JPEG Bildes werden alle 8x8 Blöcke bei der Entropie-Kodierung durch dieselbe Quantisierungstabelle kodiert. Wenn nun ein Manipuliertes Bild vorliegt können Bereiche dessen, Eigenschaften von verschiedenen Quantisierungstabellen enthalten was zu einer Inkonsistenz führt. Zur Schätzung der Quantisierungstabelle des Originalbildes bei JPEG gibt es mehrere mathematische Verfahren welche anwendbar sind: Gängig ist unter anderem die Maximum-Likelihood-Schätzung auch als \emph{Methode der größten Plausibilität} bezeichnet oder die Maximum-a-posteriori-Schätzung.\cite{Chen2011} Auf die mathematischen Schätzverfahren wird nicht weiter Bezug genommen.\\
 Mit der geschätzten Quantisierungstabelle ist es nun möglich, Blockinkonsistenzen zu erkennen und die Blöcke welche von einer Bildmanipulation betroffen sind zu lokalisieren. Die Möglichkeit, dass die Schätzung stark von der verwendeten Quantisierungstabelle des Originalbildes abweicht erhöht sich aber mit jeder erneuten Kompression des Manipulierten Bildes.\\
 In der Praxis findet eine erneute Kompression einer Manipulation meist nicht durch den Ersteller sondern durch das verwendete Medium statt. So werden in den allermeisten sozialen Netzwerken Bilder nach dem Hochladen erneut komprimiert um die Dateigröße zu verringern und so Zeit beim erneuten Abruf über das Netzwerk zu sparen. Auch die gängigen Messenger-Dienste komprimieren das Bild vor dem Absenden. Eine bessere Erkennung von mehrfach komprimierten Bildern liefert die Methode welche im nächsten Unterpunkt beschrieben wird.
-
-
 
 \subsection{Anomalie von Kompressionsartefakten}
 In JPEG Bildern welche mehrfach komprimiert und im JPEG Format wieder abgespeichert wurden, könne sich die Kompressionsartefakte von dein einfach komprimierten Bildern unterscheiden. Ziel dieser Methode ist es nun Anomalien in den Kompressionsartefakten zu erkennen.\\
@@ -53,14 +46,20 @@ Obwohl mithilfe dieser Methode versucht wird, Anomalien in der Verteilung der Bi
 Das heißt, falls das Bild nach der Manipulation beschnitten oder räumlich verschoben wurde, sind die Blockgrenzen gegenüber dem ursprünglichen JPEG Bild falsch ausgerichtet und können somit nicht korrekt erkannt werden.
 
 \section{Error-Level-Analyse}
-Die in \autoref{chap:bildkompression} beschriebene Kodierung von JPEG Bildern wird auf alle drei Farbräume eines Bildes angewandt
+Die \ac{ELA} ist eine Methoden zur Erkennung unterschiedlichen Kompressionsgraden in einem Bild, Ziel ist es also nun die Bereiche eines Bildes hervorzuheben, welche unterschiedliche Kompressionseigenschaften aufweisen. Bei der ELA wird das zu untersuchende Bild mit einer bestimmten JPEG-Qualitätsstufe neu komprimiert. Das neu komprimierte Bild wird dann mit dem Original verglichen, es sollte sich die Qualität jedes Quadrat der 8x8 Matrix um das selbe Nivea reduzieren.\\
+
+Welche JPEG-Qualitätsstufe für die erneute Komprimierung des Bildes verwendet wird, kann mithilfe einer Formel berechnet werden (Siehe \autoref{fig:qualitaetsformel}), welche die Differenz zwischen dem Mittelwert aus der Quantisierungstabelle Y (Luminanz) und CrCb (Chrominanz) berechnet. Dieser Schritt ist Wichtig und kann einen Großen Einflussfaktor auf das Endergebnis haben. Wenn beispielsweise ein Bild mit einer Qualitätsstufe von 90\% gespeichert wird und dann erneut mit einer Qualitätsstufe von 90\% gespeichert wird hat das erneut abgespeicherte Bild im Vergleich zum Originalen eine Qualitätsstufe von 81\%.\cite{Warif_2015}
 
 
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{images/formel/qualitaetsformel.png}
+		\caption{Berechnung der JPEG-Qualitätsstufe}
+		\label{fig:qualitaetsformel}
+	\end{center}
+\end{figure}
 
-
-
-
-
+Zur Veranschaulichung der Unterscheide welche beim anwenden der ELA gefunden wurden, wird ein weiteres Bild erzeugt in welchem diese farbig markiert sind. Schlussendlich kann diese ELA-Technik auch dafür verwendet werden das Qualitätsniveau eines Bildes zu bewerten. Aufgrund der Eigenschaft, dass diese aber auch Änderungen einfärben kann welche das Ergebnis einer Bildkomprimierung von Kommerziellen Produkten wie Photoshop oder GIMP sind, eignet sich die Error-Level-Analyse auch im Bereich der Bildforensik.
 
 
 
