@@ -1,10 +1,30 @@
 \chapter{Grundlagen}
-\section{Bildkompression}
 Für die Anwendung der \acl{ELA} zu verstehen, ist es wichtig die Grundlagen der Bildkompression zu kennen. Die \ac{ELA} setzt an den Eigenschaften an, welche Bilder in Verlustbehafteten Bildformaten aufweisen.\\
 Eines der bekanntesten Bildformate welches diese Eigenschaft ausweist ist JPEG, eine Norm (ISO/IEC 10918-1 oder CCITT T.81) zur Bildkomprimierung welche von der \ac{JPEG} entwickelt wurde. Das \ac{JPEG}-Schema ist zwar bei genauer Betrachtung recht komplex, das Grundprinzip ist allerdings leicht zu verstehen.\\
+
+\section{Bilddarstellung in JPEG} \label{chap:bilddarstellung}
+Bevor ein Digitalbild im JPEG-Format Kodiert werden kann muss es aus dem RGB-Farbmodell in das YUV-Farbmodell konvertiert werden. Hier wird das Bild nicht wie im RGB-Farbmodell aus den drei Farben rot, grün und blau dargestellt sondern aus Luminanz und Chrominanz. Die Luminanz (Y) gibt die Helligkeit des Bildes an, die Komponenten U und V die Farbigkeit. U beschreibt die Balance zwischen Rot und Grün und V die zwischen Gelb und Blau. Abbildung \ref{fig:YUV-Farbmodell} visualisiert die drei Komponenten des YUV-Farbmodells. Die Konvertierung eines Bildes aus dem RGB-Farbmodell erfolgt dabei mit Hilfe einer einfachen Matrizenmultiplikation.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=1\textwidth]{images/YCbCr-Farbmodell.jpg}
+		\caption{YUV-Farbmodell}
+		\label{fig:YUV-Farbmodell}
+	\end{center}
+\end{figure}
+
+
+
+
+
+
+\section{Bildkompression in JPEG} \label{chap:bildkompression}
+Die in \autoref{chap:bilddarstellung} beschriebenen Farbräume sind die Grundlage für die Kompression im JPEG Format. Der Y-Farbraum welcher die Helligkeit des Bildes beschreibt wird hierbei in der original Auflösung belassen. Im U und V Farbraum werden jeweils 4 Pixel zusammengefasst. Diesen Vorgang nennt man Subsampling.\cite{Vornberger} Nachfolgende Schritte werden auf alle drei Matrizen des YUV-Farbraums angewandt.\\
+
 In einem ersten Schritt wird das Bitmap-Bild in 8x8 Matrizen aufgeteilt und mit Hilfe der \acp{DCT} von einer 8x8 Ortsmatrix, in eine 8x8 Frequenzmatrix umgewandelt. Alle folgenden Schritte arbeiten nun mit der diesen Matrizen, das Bild wird nicht mehr als ganzes betrachtet.\\
 Jede dieser Pixelgruppen wird separat mit einer eigenen DCT kodiert und kann auch wieder verlustfrei reproduziert werden. Abbildung \ref{fig:Dctjpeg} zeigt die Basisfunktion einer zweidimensionalen DCT (Quantisierungstabelle) wobei zu sehen ist, dass die Frequenz von links nach rechts und von oben nach unten zunimmt. Bei der anschließenden Quantisierung werden die höherfrequenten Anteile des Bildes geringer gewichtet, als die niederfrequenten und die Koeffizienten welche nahezu 0 sind werden auf 0 gesetzt.\cite{Zichner2002}
 Der letzte Schritt der Kompression ist die Entropie-Kodierung der Koeffizienten, wobei hier meistens die Huffman-Kodierung zum Einsatz kommt.\\
+
 Die Dateigröße des komprimierten Bildes hängt vom Inhalt und der Qualität des Originalbildes ab. In der Regel benötigt ein Bild mit wenig Details wie zum Beispiel einem Foto des blauen Himmels weniger Speicherplatz als ein Bild welches viele Details enthält wie z.B. ein Foto einer Menschenmenge.\cite{Warif_2015}\\
 
 \begin{figure}[H]
@@ -27,3 +47,21 @@ In der Praxis findet eine erneute Kompression einer Manipulation meist nicht dur
 
 
 \subsection{Anomalie von Kompressionsartefakten}
+In JPEG Bildern welche mehrfach komprimiert und im JPEG Format wieder abgespeichert wurden, könne sich die Kompressionsartefakte von dein einfach komprimierten Bildern unterscheiden. Ziel dieser Methode ist es nun Anomalien in den Kompressionsartefakten zu erkennen.\\
+Mathematisch kommt hier das Benfordsche Gesetz zum Einsatz welche den Frequenzbereich der Bildblöcke aus der 8x8 Matrix Analysiert.\cite{Chen2011} Dieses besagt, dass umso niedriger der Wert einer Ziffernsequenz mit bestimmter Länge ist, desto häufiger ist dessen Auftreten.\cite{WikiBenford}\\
+Obwohl mithilfe dieser Methode versucht wird, Anomalien in der Verteilung der Bildblöcke zu erkennen, stößt sie an ihre Grenzen wenn es darum geht Anomalien in Bildern mit falsch ausgerichteten Blockgrenzen zu erkennen.\\
+Das heißt, falls das Bild nach der Manipulation beschnitten oder räumlich verschoben wurde, sind die Blockgrenzen gegenüber dem ursprünglichen JPEG Bild falsch ausgerichtet und können somit nicht korrekt erkannt werden.
+
+\section{Error-Level-Analyse}
+Die in \autoref{chap:bildkompression} beschriebene Kodierung von JPEG Bildern wird auf alle drei Farbräume eines Bildes angewandt
+
+
+
+
+
+
+
+
+
+
+
