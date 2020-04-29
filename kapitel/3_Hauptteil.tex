@@ -1,6 +1,6 @@
 
 \chapter{Implementierung}
-In diesem Kapitel geht es um die Anwendung des ELA-Algorithmus, dafür ist es notwendig eine Implementierung zu schreiben oder eine Vorhandene zu verwenden. Es gibt viele Bibliotheken und Frameworks in den verschiedenen Programmiersprache welche grundlegende Funktionen für die Bildverarbeitung bereitstellen mithilfe dessen eine Implementierung möglich wären. Nachfolgend eine Auswahl welche ich für geeignet hielt.
+In diesem Kapitel geht es um die Anwendung des ELA-Algorithmus, dafür ist es notwendig eine Implementierung zu schreiben oder eine Vorhandene zu verwenden. Es gibt einige Bibliotheken und Frameworks in unterschiedlichen Programmiersprachen welche grundlegende Funktionen für die Bildverarbeitung bereitstellen mithilfe dessen eine Implementierung möglich wären. Nachfolgend eine Auswahl geeigneter Grafikbibliotheken:
 
 \begin{description}
 	\item[Dlib:] Bibliothek für Java
@@ -10,19 +10,19 @@ In diesem Kapitel geht es um die Anwendung des ELA-Algorithmus, dafür ist es no
 \end{description}
 
 Für einen ersten Test hab ich mich für die \emph{OpenCV} Bibliothek in Verbindung mit C++ entschieden, dies hatte den einfach Grund, dass ich für die Sprache und Bibliothek schon eine entsprechende Entwicklungsumgebung eingerichtet hatte welche zuvor für ein anderes Projekt benötigt wurde.\\
-Eine Implementierung in Java oder Python wäre ebenso möglich gewesen. Insbesondere Java wäre im Hinblick auf den Wunsch eine Pluginlösung für die \emph{ImageJ} Software zu entwickeln die geeignetere Wahl gewesen (Siehe \autoref{chap:ImagJ}). 
+Eine Implementierung in Java oder Python wäre ebenso möglich gewesen. Insbesondere Java wäre im Hinblick auf den Wunsch eine Plugin Lösung für die \emph{ImageJ} Software zu entwickeln die geeignetere Wahl gewesen (Siehe \autoref{chap:ImagJ}). 
 
 \section{Variante in C++}
-Der vollständige Programmcode dieser Implementierung ist im Anhang \autoref{appendix:cppCode} zu finden. Die Funktionsweise des Programms ist sehr simpel. Zu Beginn werden drei Eingabeparameter benötigt die direkt im Programm in der Variablendeklaration angegeben werden können. Dazu gehört die Fehlertoleranz \emph{errorScale}, diese wird später beim berechnen des ELA-Bildes mit dem Differenzbetrag des Quellbildes und des Vergleichsbildes multipliziert.\\
-Ein weiterer Wert der angegeben werden muss ist \emph{jPEGQuality}, also die Qualitätsstufe auf welcher das JPEG Bild neu komprimiert werden soll. Möglich wäre hier auch das berechnen der Qualitätsstufe über die in \autoref{chap:ela} gezeigte Formel. In der jetzigen Implementierung muss die optimale Qualitätsstufe über das ausprobieren von Werte herausgefunden werden, denkbar wäre auch ein grafisches Element bei dem per Schieberegler die Qualitätsstufe ausgewählt werden kann.\\
-Der dritte Parameter ist der Pfad zum Bild welches als Ausgangsbild für die ELA verwendet wird. Nun bietet die \emph{OpenCV} Bibliothek ein Containerformat \emph{Mat} sowie entsprechende Methoden für das ein- und auslesen von Bildern. Der \emph{Mat}-Container ist dabei simple gesagt nur eine zweidimensionales Array.\\
-Das Bild wird also einen solchen \emph{Mat}-Container eingelesen und in einem nächsten Schritt mit dem Parameter der JPEG-Qualität wieder neu Komprimiert und temporär auf der Festplatte gespeichert (Zeile 30-33). Nun sind sowohl beide Bilder vorhanden welche für den Vergleich untereinander benötigt werden, das temporär abgespeicherte Bild wird wieder in einen \emph{Mat}-Container eingelesen und die eigentliche Vergleichsoperation wird gestartet. Für das Ergebnis wird nun noch ein dritter Container mit Nullen befüllt (Zeile 36), dieser muss initial natürlich die selbe Anzahl an Reihen und Spalten haben wie das Original Bild.\\
+Der vollständige Programmcode dieser Implementierung ist im Anhang \autoref{appendix:cppCode} zu finden. Die Funktionsweise des Programms ist sehr simpel. Zu Beginn werden drei Eingabeparameter benötigt die direkt im Programm in der Variablendeklaration angegeben werden können. Dazu gehört die Fehlertoleranz \emph{errorScale}, diese wird später beim Berechnen des ELA-Bildes mit dem Differenzbetrag des Quellbildes und des Vergleichsbildes multipliziert.\\
+Ein weiterer Wert, der angegeben werden muss ist \emph{jPEGQuality}, also die Qualitätsstufe auf welcher das JPEG Bild neu komprimiert werden soll. Möglich wäre hier auch das Berechnen der Qualitätsstufe über die in \autoref{chap:ela} gezeigte Formel. In der jetzigen Implementierung muss die optimale Qualitätsstufe über das ausprobieren von Werten herausgefunden werden, denkbar wäre auch ein grafisches Element bei dem per Schieberegler die Qualitätsstufe ausgewählt werden kann.\\
+Der dritte Parameter ist der Pfad zum Bild welches als Ausgangsbild für die ELA verwendet wird. Nun bietet die \emph{OpenCV} Bibliothek ein Containerformat \emph{Mat} sowie entsprechende Methoden für das ein- und auslesen von Bildern. Der \emph{Mat}-Container ist dabei simple gesagt nur ein zweidimensionales Array.\\
+Das Bild wird also einen solchen \emph{Mat}-Container eingelesen und in einem nächsten Schritt mit dem Parameter der JPEG-Qualität wieder neu komprimiert und temporär auf der Festplatte gespeichert (Zeile 30-33). Nun sind sowohl beide Bilder vorhanden welche für den Vergleich untereinander benötigt werden, das temporär abgespeicherte Bild wird wieder in einen \emph{Mat}-Container eingelesen und die eigentliche Vergleichsoperation wird gestartet. Für das Ergebnis wird nun noch ein dritter Container mit Nullen befüllt (Zeile 36), dieser muss initial natürlich dieselbe Anzahl an Reihen und Spalten haben wie das Original Bild.\\
 
 Die Vergleichsoperation läuft in zwei geschachtelten Schleifen ab, eine für die Reihen und eine für die Spalten. Die Rechenoperation ist denkbar simpel, wie bereits erwähnt wird der Differenzbetrag von Quellbild und Vergleichsbild mit der Fehlertoleranz multipliziert:
 
 \[\tiny OutputPicture[x] = \left \| InputPicture[x] - ComparePicture[x] \right \| * ErrorScale\]
 
-Im Programmcode fällt auf, die Rechenoperation jeweils dreimal ausgeführt wird, das war ein Test um die Laufzeit zu verbessern und tatsächlich ist die Operation spürbar schneller denn es werden zwei drittel der inneren Schleifenvorgänge eingespart.\\
+Im Programmcode fällt auf, die Rechenoperation jeweils dreimal ausgeführt wird. Dies war ein Test, um die Laufzeit zu verbessern. Tatsächlich ist die Operation spürbar schneller geworden, denn es werden zwei Drittel der inneren Schleifenvorgänge eingespart.\\
 Nach der Vergleichsoperation werden Quellbild als auch das erzeugte ELA-Bild in einem neuen Fenster ausgegeben. Eine Testausgabe mit einem manipulierten Bild ist in \autoref{fig:cppProgrammbeispiel} zu sehen. Wie das Ergebnis zu interpretieren ist wird in \autoref{chap:ergebnisanalyse} näher erläutert.
 
 \begin{figure}[H]
@@ -34,7 +34,7 @@ Nach der Vergleichsoperation werden Quellbild als auch das erzeugte ELA-Bild in 
 \end{figure}
 
 \section{Variante in Java als ImageJ Plugin} \label{chap:ImagJ}
-Da die \emph{OpenCV} Bibliothek auch Java als Programmiersprache unterstützt wäre eine Portierung in die Java Umgebung denkbar Einfach. Aufgrund von Problemen beim einbinden der Bibliothek und da die Fehler nicht in absehbarer Zeit gelöst werden konnten, wurde auf die von Sebastiano Milardo veröffentlichte \emph{ImageJ}-Implementierung  zurückgegriffen welche die ELA mittels der \emph{ImageIO} Bibliothek aus Javax implementiert hat.\cite{Milardo2018} Hier führt der selbe Input mit den selben Qualitäts- und Fehlertoleranzwerten zu einem sichtbar veränderten Ergebnis. Dies ist auf den verwendeten Kompressionsalgorithmus zurückzuführen. Eine Testausgabe mit einem manipulierten Bild ist in \autoref{fig:imagejProgrammbeispiel} zu sehen.
+Da die \emph{OpenCV} Bibliothek auch Java als Programmiersprache unterstützt wäre eine Portierung in die Java Umgebung denkbar einfach. Aufgrund von Problemen beim einbinden der Bibliothek und da die Fehler nicht in absehbarer Zeit gelöst werden konnten, wurde auf die von Sebastiano Milardo veröffentlichte \emph{ImageJ}-Implementierung  zurückgegriffen welche die ELA mittels der \emph{ImageIO} Bibliothek aus Javax implementiert hat.\cite{Milardo2018} Hier führt derselbe Input mit denselben Qualitäts- und Fehlertoleranzwerten zu einem sichtbar veränderten Ergebnis. Dies ist auf den verwendeten Kompressionsalgorithmus zurückzuführen. Eine Testausgabe mit einem manipulierten Bild ist in \autoref{fig:imagejProgrammbeispiel} zu sehen.
 
 \begin{figure}[H]
 	\begin{center}
