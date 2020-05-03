@@ -1,5 +1,5 @@
 \chapter{Grundlagen}
-Für die Anwendung der \acl{ELA} zu verstehen, ist es wichtig die Grundlagen der Bildkompression zu kennen. Die \ac{ELA} setzt an den Eigenschaften an, welche Bilder in Verlustbehafteten Bildformaten aufweisen.\\
+Um die Anwendung der \acl{ELA} zu verstehen, ist es wichtig die Grundlagen der Bildkompression zu kennen. Die \ac{ELA} setzt an den Eigenschaften an, welche Bilder in verlustbehafteten Bildformaten aufweisen.\\
 Eines der bekanntesten Bildformate welches diese Eigenschaft ausweist ist JPEG, eine Norm (ISO/IEC 10918-1 oder CCITT T.81) zur Bildkomprimierung welche von der \ac{JPEG} entwickelt wurde. Das \ac{JPEG}-Schema ist zwar bei genauer Betrachtung recht komplex, das Grundprinzip ist allerdings leicht zu verstehen.\\
 
 \section{Bilddarstellung in JPEG} \label{chap:bilddarstellung}
@@ -31,7 +31,7 @@ Die Dateigröße des komprimierten Bildes hängt vom Inhalt und der Qualität de
 \end{figure}
 
 \section{Erkennung von Kompressionsartefakten}
-In den meisten Fällen einer Bildmanipulation wird ein Bild neu komprimiert, speziell dann wenn es durch die Bildbearbeitungssoftware abgespeichert wird. Dieser Vorgang verändert die ursprüngliche Komprimierungseigenschaften, das Ziel besteht nun darin diese Komprimierungseigenschaften, auch Artefakte genannt, zu analysieren und innerhalb eines Bildes möglicherweise Inkonsistenzen zu erkennen.\\
+In den meisten Fällen einer Bildmanipulation wird ein Bild neu komprimiert, speziell dann wenn es durch die Bildbearbeitungssoftware abgespeichert wird. Dieser Vorgang verändert die ursprüngliche Komprimierungseigenschaften. Das Ziel besteht nun darin diese Komprimierungseigenschaften, auch Artefakte genannt, zu analysieren und innerhalb eines Bildes möglicherweise Inkonsistenzen zu erkennen.\\
 Hier gibt es zwei methodische Vorgehensweisen, um solche Artefakte zu unterscheiden. Erstere Methode versucht Inkonsistenzen in der JPEG-Quantisierungstabellen zu erkennen, zweitere verwendet die Komprimierungsartefakte im Frequenzbereich des Bildes um so eine Signatur zu bilden und zwischen unterschiedlichen Kompressionscharakteristika zu unterscheiden.\cite{Chen2011} In folgenden Unterpunkten werden beide Ansätze nochmals kurz zusammengefasst.
 
 \subsection{Inkonsistenz bei der Quantisierungstabelle}
@@ -40,7 +40,7 @@ Mit der geschätzten Quantisierungstabelle ist es nun möglich, Blockinkonsisten
 In der Praxis findet eine erneute Kompression einer Manipulation meist nicht durch den Ersteller sondern durch das verwendete Medium statt. So werden in den allermeisten sozialen Netzwerken Bilder nach dem Hochladen erneut komprimiert um die Dateigröße zu verringern und so Zeit beim erneuten Abruf über das Netzwerk zu sparen. Auch die gängigen Messenger-Dienste komprimieren das Bild vor dem Absenden. Eine bessere Erkennung von mehrfach komprimierten Bildern liefert die Methode welche im nächsten Unterpunkt beschrieben wird.
 
 \subsection{Anomalie von Kompressionsartefakten}
-In JPEG Bildern welche mehrfach komprimiert und im JPEG Format wieder abgespeichert wurden, könne sich die Kompressionsartefakte von dein einfach komprimierten Bildern unterscheiden. Ziel dieser Methode ist es nun Anomalien in den Kompressionsartefakten zu erkennen.\\
+In JPEG Bildern, welche mehrfach komprimiert und im JPEG Format wieder abgespeichert wurden, könne sich die Kompressionsartefakte von den einfach komprimierten Bildern unterscheiden. Ziel dieser Methode ist es nun, Anomalien in den Kompressionsartefakten zu erkennen.\\
 Mathematisch kommt hier das Benfordsche Gesetz zum Einsatz welche den Frequenzbereich der Bildblöcke aus der 8x8 Matrix analysiert.\cite{Chen2011} Dieses besagt, dass umso niedriger der Wert einer Ziffernsequenz mit bestimmter Länge ist, desto häufiger ist dessen Auftreten.\cite{WikiBenford}\\
 Obwohl mithilfe dieser Methode versucht wird, Anomalien in der Verteilung der Bildblöcke zu erkennen, stößt sie an ihre Grenzen, wenn es darum geht Anomalien in Bildern mit falsch ausgerichteten Blockgrenzen zu erkennen.\\
 Das heißt, falls das Bild nach der Manipulation beschnitten oder räumlich verschoben wurde, sind die Blockgrenzen gegenüber dem ursprünglichen JPEG Bild falsch ausgerichtet und können somit nicht korrekt erkannt werden.
@@ -59,7 +59,7 @@ Welche JPEG-Qualitätsstufe für die erneute Komprimierung des Bildes verwendet 
 	\end{center}
 \end{figure}
 
-Zur Veranschaulichung der Unterscheide welche beim Anwenden der ELA gefunden wurden, wird ein weiteres Bild erzeugt in welchem diese farbig markiert sind. Schlussendlich kann diese ELA-Technik auch dafür verwendet werden das Qualitätsniveau eines Bildes zu bewerten. Aufgrund der Eigenschaft, dass diese aber auch Änderungen einfärben kann welche das Ergebnis einer Bildkomprimierung von Kommerziellen Produkten wie Photoshop oder GIMP sind, eignet sich die Error-Level-Analyse auch im Bereich der Bildforensik.\\
+Zur Veranschaulichung der Unterscheide welche beim Anwenden der ELA gefunden wurden, wird ein weiteres Bild erzeugt in welchem diese farbig markiert sind. Schlussendlich kann diese ELA-Technik auch dafür verwendet werden das Qualitätsniveau eines Bildes zu bewerten. Aufgrund der Eigenschaft, dass diese aber auch Änderungen einfärben kann welche das Ergebnis einer Bildkomprimierung von kommerziellen Produkten wie Photoshop oder GIMP sind, eignet sich die Error-Level-Analyse auch im Bereich der Bildforensik.\\
 
 
 
